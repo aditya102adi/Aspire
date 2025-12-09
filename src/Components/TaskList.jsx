@@ -1,25 +1,29 @@
 import React from 'react'
 
-export default function TaskList({tasks, updateTask, deleteTask}) {
-  return (
-    <div>
-        <ul>
-          {/* map will read the task one by one where index is my unique value*/}
-          {/* Fetch the task one by one -- Map is a HOF */}
-          {tasks.map((task, index) => {
-            <li>
-              <div>
-                {task.text}
-                <small>{task.priority} {task.category}</small>
-              </div>
+export default function TaskList({ tasks, updateTask, deleteTask }) {
+  const toggleComplete = (index) => {
+    const updatedTask = { ...tasks[index], completed: !tasks[index].completed };
+    updateTask(updatedTask, index);
+  };
 
-              <div>
-                <button>Complete</button>
-                <button>Delete</button>
-              </div>
-            </li>
-          })}
-        </ul>
+  return (
+    <div className='task-list'>
+      <ul>
+        {tasks.map((task, index) => (
+          <li key={index} className={task.completed ? 'completed' : ''}>
+            <div>
+              <span>{task.text}</span>
+              <small> ({task.priority}, {task.category})</small>
+            </div>
+            <button onClick={() => toggleComplete(index)}>
+              {task.completed ? 'Undo' : 'Complete'}
+            </button>
+            <button onClick={() => deleteTask(index)}>
+              Delete
+            </button>
+          </li>
+        ))}
+      </ul>
     </div>
-  )
+  );
 }
